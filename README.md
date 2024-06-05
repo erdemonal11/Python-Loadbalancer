@@ -1,80 +1,73 @@
-The load balancer has 4 optional algorithms for load distribution. The menu 
-algorithms are divided into 2 parts dynamic and static: 
-Statics: 
-• Round-Robin: This is the simplest algorithm to just give each server a 
-request one by one repeatedly. 
-• Weighted-Round-Robin: This algorithm requires the servers to have 
-weights defined in the load balancer. It gives each server as many 
-requests as their weights one by one repeatedly. 
-Dynamics: 
-• Weighted-Response-Time: This is the most powerful algorithm the 
-load balancer possesses, it returns the location of the server with the 
-least response time. 
-• Weighted-Least-Connection: This algorithm takes into account the 
-current number of active connections to each server. Servers with 
-fewer active connections are preferred for new requests. 
+# Python Load Balancer
 
-LOAD BALANCER 
-The load balancer has a client socket always ready and listening, any client 
-connected to this socket is given a location of a server which is returned by a 
-function in the load balancer. This determines_Server function determine 
-the next server according to the current algorithm of the load balancer. A 
-response time dictionary with Server object instances as keys and response 
-times (float) as values contains each response time for each server. 
-Weighted-Response-Time algorithm works according to this dictionary. A 
-server weights dictionary with Server object instances as keys and weights 
-(integers) as values contains each weight value for each server. Weighted
-Round-Robin algorithm works according to this dictionary. All server 
-instances are kept in a list in the load balancer, for round robin and weighted 
-round robin, an internal server index counter and weight counter 
-are being used. A load balancer can listen to its servers to determine if a 
-server is dead or alive. A server notifies the user when it has requested a 
-computation and of its leave and notifies it again when the computation is completed.If the Weighted-Response-Time algorithm is being used, then the 
-load balancer will also automatically detect each dead server by a 5-second 
-timeout and remove them from the servers list. If the Weighted-Least
-Connection algorithm is being used, then the load balancer will also detect 
-the connections of each server and direct the next connection to the server 
-that has the least connection number.
+This project implements a simple Python-based load balancer system with various algorithms for load distribution. Below is a guide to understanding and running the project effectively.
 
-CLIENT 
-The client's connection is handled by its class' connect() method. It takes 
-ip(str), port(int), and lb(boolean) arguments, and if lb = True, then the client 
-will request a server location and call connect() again with this new 
-location, but this time as lb=False. When lb = False, then the client will ask 
-an input from the user to determine what type of request to make to the 
-server. 
-3 types of requests are available: 
-• Request the server's dictionary with the format {"file name" : "file 
-type"}. 
-• Request a file from the user with the filename taken as input from the 
-user and download it to the local machine. 
-• Request a computation that takes an integer value from the user and 
-puts the server to sleep for as many seconds as that input value 
-If at any point, a request is not successful and/or the server does not 
-respond, the client will automatically turn back to the load balancer and 
-ask for another server's location. 
+## Project Structure
 
-SERVER 
-The server is always listening but does not make a direct connection with the 
-load balancer except to test response times. If a request is met successfully, then the socket is closed and set ready for the next 
-connection. To send Tuple, List, and Dict type of data through the sockets, 
-JSON.dumps() and JSON.loads() methods are used to serialize and de
-serialize the data, respectively. All connection protocols are of TCP since 
-there is no room for mistakes with the file transactions.
+The project consists of the following components:
 
-PLAYGROUND 
-In the playground class, there is an input for several servers available 
-between [1-50] and as many servers are instantiated and registered to the 
-load balancer at the beginning. There can be one or more clients 
-initiated but giving input from all clients would require execution in different 
-command panels. All these clients and server and load balancer 
-instances are run on different threads since committing a socket's listen() 
-method would freeze the command panel and require more than one panel 
-to monitor and operate.
+- Load Balancer
+- Client
+- Server
+- Playground
 
-How to run the Project? 
-Running the playground.py file will be sufficient to test the project, 
-connection information and input feedback will be more than enough to direct 
-the user.
+## Load Balancer
+
+The load balancer is responsible for distributing incoming requests among available servers. It employs various algorithms for load distribution, including:
+
+### Static Algorithms
+
+- Round-Robin
+- Weighted-Round-Robin
+
+### Dynamic Algorithms
+
+- Weighted-Response-Time
+- Weighted-Least-Connection
+
+## Client
+
+The client module facilitates communication with the load balancer and servers. Key functionalities include:
+
+- Connecting to the load balancer to request server locations.
+- Handling different types of requests to servers.
+- Automatically switching to another server if a request fails or the server is unresponsive.
+
+## Server
+
+The server module listens for incoming requests from clients and processes them accordingly. Important features include:
+
+- Communicating with the load balancer to test response times.
+- Utilizing JSON serialization for transmitting data such as tuples, lists, and dictionaries.
+- Employing TCP for all connection protocols to ensure reliable file transactions.
+
+## Playground
+
+The playground serves as an environment for testing the load balancer system. It allows users to instantiate multiple servers and clients, providing input to simulate real-world scenarios. Each instance runs on a separate thread to maintain responsiveness and prevent freezing.
+
+## How to Run the Project
+
+To test the project, follow these steps:
+
+1. Run the `playground.py` file.
+2. Input the desired number of servers.
+3. Instantiate one or more clients and provide input as required.
+4. Observe the communication between clients, the load balancer, and servers.
+
+## Repository Structure
+
+The repository includes the following files:
+
+- `load_balancer.py`: Implementation of the load balancer.
+- `client.py`: Implementation of the client.
+- `server.py`: Implementation of the server.
+- `playground.py`: Main script to initiate testing.
+- `README.md`: Instructions and overview of the project.
+
+## Dependencies
+
+Ensure you have Python installed on your system. No additional dependencies are required for running this project.
+
+Feel free to contribute to the project by forking the repository and submitting pull requests with your improvements or suggestions.
 
 ![image](https://github.com/erdemonal11/Python-Loadbalancer/assets/137915983/a9c60e0a-e4f4-46c2-bf74-e50e700e4d9d)
